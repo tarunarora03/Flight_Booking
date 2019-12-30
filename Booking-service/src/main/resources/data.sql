@@ -1,0 +1,8 @@
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Tarun',	'Arora',	1, 	245.00, 'Active', SYSDATE, 2)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Ritesh', 'Ranjan',	2, 	495.34, 'Active', SYSDATE, 10)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Sam', 	'Alpha',	5, 	245.00, 'Active', SYSDATE, 20)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Roger', 	'Beta',		3, 	675.43, 'Active', SYSDATE, 12)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Tina', 	'Ja',		1, 	495.34, 'Active', SYSDATE, 4)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Baki', 	'Boda',		4, 	245.00, 'Active', SYSDATE, 8)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Natsu', 	'Fire',		8, 	578.34, 'Active', SYSDATE, 3)
+insert into Booking( firstname, lastname, flightid, amountpaid, status, bookingdate, seatsbooked) values ( 'Madame',	'Jo',		11, 245.00, 'Active', SYSDATE, 1)
