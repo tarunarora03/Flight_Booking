@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class FlightController {
 
 	@GetMapping(path = "/all")
 	public List<FlightDTO> getAllFlightRoutes() {
+		System.out.println("Get all the flights");
 		return flightService.getAllFlights();
 	}
 
@@ -35,8 +37,8 @@ public class FlightController {
 
 	}
 	
-	@PutMapping(path="/update/{flightId}")
-	public boolean updateSeats(@PathVariable Integer flightId, @RequestBody FlightDTO dto ) {
+	@PostMapping(path="/update/{flightId}")
+	public String updateSeats(@PathVariable Integer flightId, @RequestBody FlightDTO dto ) {
 		System.out.println("In Put Request:"+flightId+ "|Other:"+dto.getOperation()+"|"+dto.getSeatsAvailable());
 		return flightService.updateSeats(flightId, dto);
 	}

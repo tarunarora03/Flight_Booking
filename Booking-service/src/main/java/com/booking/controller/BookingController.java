@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,20 +20,22 @@ public class BookingController {
 
 	@Autowired
 	BookingService bookingService;
-	
-	@GetMapping(path="/all")
-	public List<BookingDTO> getAllBookings(){
+
+	@GetMapping(path = "/all")
+	public List<BookingDTO> getAllBookings() {
 		return bookingService.getAllBookings();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public String deleteBooking(@PathVariable int id) {
 		int stat = bookingService.deleteBooking(id);
-		return stat==0 ? "Sucess":"failed";
+		return stat == 0 ? "Sucess" : "failed";
 	}
-	
-	@PostMapping
-	public int addNewBooking() {
-		return 0;
+
+	@PostMapping("/add")
+	public String addNewBooking(@RequestBody BookingDTO dto) {
+		System.out.println("received booking");
+		int id = bookingService.addBooking(dto);
+		return id == -1 ? "Booking Failed" : "Booking Successful:" + id;
 	}
 }

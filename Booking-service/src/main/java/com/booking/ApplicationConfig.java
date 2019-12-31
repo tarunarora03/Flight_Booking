@@ -2,6 +2,7 @@ package com.booking;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +33,7 @@ public class ApplicationConfig {
 		return new ApiInfoBuilder().title("Spring Boot Booking service").description("Booking Service").version("1.0.0").build();
 	}
 	
+	@LoadBalanced
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		System.out.println("Root URL:"+rootURL);

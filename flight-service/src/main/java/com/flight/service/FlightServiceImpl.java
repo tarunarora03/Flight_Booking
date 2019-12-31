@@ -76,7 +76,7 @@ public class FlightServiceImpl implements FlightService {
 	}
 
 	@Override
-	public boolean updateSeats(int flightId, FlightDTO dto) {
+	public String updateSeats(int flightId, FlightDTO dto) {
 		try {
 			Optional<Flight> flight = flightRepo.findById(flightId);
 			if(flight.isPresent()) {
@@ -87,11 +87,11 @@ public class FlightServiceImpl implements FlightService {
 
 				flightRepo.save(flight.get());
 			}
-			return true;
+			return "success";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return "failed";
 		}
 	}
 

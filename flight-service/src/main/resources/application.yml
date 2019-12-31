@@ -1,5 +1,6 @@
 server:
-  port: 8089
+  #port: 8089
+  port: ${PORT:0}
 
 spring:
   datasource:
@@ -16,4 +17,14 @@ spring:
     console:
       enabled: true
       path: /h2Console
-   
+ 
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 2
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url: 
+      defaultZone: http://192.168.0.117:8761/eureka/
+    healthcheck:
+      enabled: true  

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,6 +14,7 @@ import com.booking.dto.BookingDTO;
 import com.booking.dto.FlightDTO;
 import com.booking.entity.Booking;
 import com.booking.repository.BookingRepository;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -46,16 +48,12 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public Integer deleteBooking(int id) {
 		try {
-//			FlightDTO flightDTO = restTemplate.getForObject("/"+id, FlightDTO.class);
-//			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-//			System.out.println(flightDTO.toString());
-//			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
-			
 			Optional<Booking> booking = bookingRepo.findById(id);
 			if(booking.isPresent()) {
 				FlightDTO flightDTO = createObj("cancel", booking.get());
-				restTemplate.put("/update/"+id, flightDTO);
+				//restTemplate.put("/update/"+id, flightDTO);
+				ResponseEntity<String> status = restTemplate.postForEntity("/update/"+id, flightDTO, String.class);
+				System.out.println("Status::::::"+status.getBody());
 				bookingRepo.deleteById(id);
 			}
 			return 0;
@@ -75,9 +73,35 @@ public class BookingServiceImpl implements BookingService {
 	}
 	
 	@Override
+	@HystrixCommand(fallbackMethod = "serviceDown")
 	public Integer addBooking(BookingDTO dto) {
-		// TODO Auto-generated method stub
-		return null;
+		Booking booking = new Booking();
+		System.out.println("Calling Flight Service to get Details.....");
+		FlightDTO flightDTO  = restTemplate.getForObject("/"+dto.getFlightId(), FlightDTO.class);
+		if(flightDTO != null  && flightDTO.getSeatsAvailable() > 0) {
+			flightDTO.setOperation("new");
+			flightDTO.setFlightID(dto.getFlightId());
+			flightDTO.setSeatsAvailable(dto.getSeatsBoooked());
+		}
+		
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity("/update/"+dto.getFlightId(), flightDTO, String.class);
+		if(responseEntity.getBody().equalsIgnoreCase("success")) {
+			booking.setFirstname(dto.getFirstName());
+			booking.setLastname(dto.getLastName());
+			booking.setFlightid(dto.getFlightId());
+			booking.setSeatsbooked(dto.getSeatsBoooked());
+			booking.setStatus("Active");
+			
+			return bookingRepo.saveAndFlush(booking).getBookingid();
+		} else {
+			System.out.println("Flight Service returned error.......");
+			return -1;
+		}
+	}
+	
+	private Integer serviceDown(BookingDTO dto) {
+		System.out.println("Flight Serivce Down. Unable to do bookings................");
+		return -1;
 	}
 
 }

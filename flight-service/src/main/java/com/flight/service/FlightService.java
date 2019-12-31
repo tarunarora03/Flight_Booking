@@ -12,5 +12,5 @@ public interface FlightService {
 	
 	public FlightDTO getFlight(int flightId);
 	
-	public boolean updateSeats(int flightId, FlightDTO dto);
+	public String updateSeats(int flightId, FlightDTO dto);
 }
